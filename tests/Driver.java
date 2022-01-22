@@ -16,6 +16,9 @@ public class Driver {
         } else {
     		LicensePlateGameSolver lpgs = new LicensePlateGameSolver();
     		ArrayList<String> answers = lpgs.solve(args[0]);
+            System.out.println(args[1] + ", " + args[1].length());
+            if (args.length >= 2 && args[1].equals("print"))
+                for(String answer: answers) System.out.println(answer);
         }
 	}
 }
