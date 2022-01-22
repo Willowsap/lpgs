@@ -12,13 +12,17 @@ CLASSES = \
 	tests/Driver.java
 
 TESTS = \
+	tests/LicensePlateGameSolverTest.java
 
-default: classes
+default: classes compile
 
 classes: $(CLASSES:.java=.class)
 
 compile: classes 
 	javac -cp .:$(JUNIT5_JAR) $(TESTS)
+
+run:
+	java tests/Driver
 
 clean:
 	rm -f *.class

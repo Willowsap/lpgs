@@ -21,7 +21,7 @@ public class LicensePlateGameSolver {
 	/**
 	 * Tournament Scrabble Dictionary Text File.
 	 */
-	public static final String DEFAULT_DICT_FILE = "src/game/dictionary.txt";
+	public static final String DEFAULT_DICT_FILE = "game/dictionary.txt";
 	
 	public static final String DEFAULT_ANSWER_FILE = "answers.txt";
 	/**
