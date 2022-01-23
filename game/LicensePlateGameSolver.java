@@ -22,8 +22,12 @@ public class LicensePlateGameSolver {
 	 * Tournament Scrabble Dictionary Text File.
 	 */
 	public static final String DEFAULT_DICT_FILE = "game/dictionary.txt";
-	
+
+    /**
+     * Default destination file for the answers.
+     */	
 	public static final String DEFAULT_ANSWER_FILE = "answers.txt";
+
 	/**
 	 * Tournament Scrabble Dictionary ArrayList.
 	 * Constructed from file.
@@ -41,7 +45,8 @@ public class LicensePlateGameSolver {
 	private String answerFile;
 	
 	/**
-	 * True requires that the first letter in the pattern not be the first letter in the word.
+	 * True requires that the first letter in the pattern not be 
+     * the first letter in the word.
 	 */
 	private boolean noStart;
 	
@@ -55,47 +60,64 @@ public class LicensePlateGameSolver {
 	 */
 	private boolean spaceBetween;
 	
-	/**
-	 * The first and last letters could still match the first and last lettesr in the pattern, as long as
-	 * The word would still match the pattern with those letters removed
-	 * Ex: "VANQUISHES" matches aqs even though it ends in an s since there is another s before it,
-	 * ie It would still match if the word was "VANQUISHE" 
-	 */
-	
+	/****************************************************************************
+     * ==== NOTE ABOUT noStart, noEnd, and spaceBetween ====
+     *
+	 * The first and last letters could still match the first and last letters 
+     * in the pattern, as long as the word would still match the pattern with
+     * those letters removed.
+     *
+	 * Ex: "VANQUISHES" matches aqs even though it ends in an s since there is 
+     * another s before it. ie It would still match if the word was "VANQUISHE" 
+	 ****************************************************************************/
 	
 	/**
 	 * No Arg Constructor
 	 * Reads in the default dictionary and initializes the ArrayList
+     * Sets the answer file to the default answer file
+     * Sets the option variables to false
 	 */
 	public LicensePlateGameSolver() {
 		this.dictionaryFile = DEFAULT_DICT_FILE;
 		this.answerFile = DEFAULT_ANSWER_FILE;
 		this.dictionary = readDictionary(DEFAULT_DICT_FILE);
-		this.noStart = false;
-		this.noEnd = false;
-		this.spaceBetween = false;
+		this.noStart = this.noEnd = this.spaceBetween = false;
 	}
 	
 	/**
 	 * Constructor
 	 * Reads in a provided dictionary and initializes the ArrayList
+     * Sets the answer file to the default answer file
+     * Sets the option variables to false
 	 */
 	public LicensePlateGameSolver(String dictFile) {
 		this.dictionaryFile = dictFile;
 		this.answerFile = DEFAULT_ANSWER_FILE;
 		this.dictionary = readDictionary(dictFile);
-		this.noStart = false;
-		this.noEnd = false;
-		this.spaceBetween = false;
+		this.noStart = this.noEnd = this.spaceBetween = false;
+	}
+
+	/**
+	 * Constructor
+	 * Reads in a provided dictionary and initializes the ArrayList
+     * Sets the answer file to the default provided file
+     * Sets the option variables to false
+	 */
+    public LicensePlateGameSolver(String dictFile, String answerFile) {
+		this.dictionaryFile = dictFile;
+		this.answerFile = answerFile;
+		this.dictionary = readDictionary(dictFile);
+		this.noStart = this.noEnd = this.spaceBetween = false;
 	}
 	
 	/**
 	 * Constructor
-	 * Reads in the dictionary and initializes the ArrayList
-	 * Sets the optional variables
+	 * Reads in the dictionary provided and initializes the ArrayList
+     * Sets the answer file to the provided filename
+	 * Sets the optional variables to the provided values
 	 */
 	public LicensePlateGameSolver(String dictFile, String answerFile, 
-			boolean noStart, boolean noEnd, boolean spaceBetween) {
+		boolean noStart, boolean noEnd, boolean spaceBetween) {
 		this.dictionaryFile = dictFile;
 		this.answerFile = DEFAULT_ANSWER_FILE;
 		this.dictionary = readDictionary(dictFile);
@@ -116,13 +138,13 @@ public class LicensePlateGameSolver {
 			System.out.println("Search term must be at least 3 letters long");
 			return null;
 		}
-		char[] letters = lettersWord.toCharArray();
 		Pattern pattern = Pattern.compile(
-				genPattern(letters),
+				genPattern(lettersWord.toCharArry()),
 				Pattern.CASE_INSENSITIVE);
+        Matcher matcher;
 		ArrayList<String> answers = new ArrayList<String>();
-		for(String word: dictionary) {
-			Matcher matcher = pattern.matcher(word);
+		for (String word: dictionary) {
+			matcher = pattern.matcher(word);
 			if(matcher.find()) answers.add(word);
 		}
 		if (answers.size() == 0) answers.add("No Solution");
@@ -141,7 +163,7 @@ public class LicensePlateGameSolver {
 	public String genPattern(char[] letters) {
 		String allLetters = spaceBetween ? "[a-z]+" : "[a-z]*";
 		String pattern = noStart ? "^[a-z]+" : "^[a-z]*";
-		for(char c: letters) pattern += (c + allLetters);
+		for (char c: letters) pattern += (c + allLetters);
 		pattern += noEnd ? "[a-z]+$" : "$";
 		return pattern;
 	}
@@ -154,7 +176,7 @@ public class LicensePlateGameSolver {
 		ArrayList<String> dictionary = new ArrayList<String>();
 		try {
 			Scanner d = new Scanner(new File(dictFile));
-			while(d.hasNext()) dictionary.add(d.next());
+			while (d.hasNext()) dictionary.add(d.next());
 		} catch (FileNotFoundException e) {
 			System.out.println("Exception while creating dictionary");
 			e.printStackTrace();
@@ -170,7 +192,7 @@ public class LicensePlateGameSolver {
 	public void writeAnswers(ArrayList<String> answers, String answerFileName) {
 		try {
 			File answerFile = new File(answerFileName);
-			if(answerFile.createNewFile()) System.out.println(answerFile.getName());
+			if (answerFile.createNewFile()) System.out.println(answerFile.getName());
 		    FileWriter answerFileWriter = new FileWriter(answerFile);
 		    for (String answer: answers) {
 		    	answerFileWriter.append(answer + "\n");  
